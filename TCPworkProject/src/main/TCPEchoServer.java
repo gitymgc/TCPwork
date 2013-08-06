@@ -11,79 +11,39 @@ public class TCPEchoServer {
 
 	private static final int BUFSIZE = 32;
 
-	public static void main(String[] args){
+	public static void main(String[] args) throws IOException{
 
 		new TCPEchoServer().exec(args);
 
 	}
 
-	public void exec(String args[]){
+	public void exec(String args[]) throws IOException{
 
 		if(args.length != 1){
 			throw new IllegalArgumentException("Parameter(s): <Port>");
 		}
 
 		int servPort = Integer.parseInt(args[0]);
-		ServerSocket servSock = null;
-		try {
-			servSock = new ServerSocket(servPort);
-		} catch (IOException e) {
-			// TODO 自動生成された catch ブロック
-			e.printStackTrace();
-		}
+		ServerSocket servSock = new ServerSocket(servPort);
 
-		int recvMsgSize = 0;
+		int recvMsgSize ;
 		byte[] byteBuffer = new byte[BUFSIZE];
-		Socket clntSock	= null;
+
 		for(; ;){
-			try {
-				clntSock = servSock.accept();
-			} catch (IOException e) {
-				// TODO 自動生成された catch ブロック
-				e.printStackTrace();
-			}
+			System.out.println("start");
+			Socket clntSock = servSock.accept();
 
 			InetAddress clntAddress = clntSock.getInetAddress();
 			String IP = clntAddress.getHostAddress();
 			System.out.println("Handing client at "+IP+ " on port"+ clntSock.getPort());
 
-			InputStream in = null;
-			try {
-				in = clntSock.getInputStream();
-			} catch (IOException e) {
-				// TODO 自動生成された catch ブロック
-				e.printStackTrace();
-			}
+			InputStream in = clntSock.getInputStream();
+			OutputStream out = clntSock.getOutputStream();
 
-			OutputStream out = null;
-			try {
-				out  = clntSock.getOutputStream();
-			} catch (IOException e) {
-				// TODO 自動生成された catch ブロック
-				e.printStackTrace();
+			while((recvMsgSize = in.read(byteBuffer)) != -1){
+				out.write(byteBuffer,0,recvMsgSize);
 			}
-
-			try {
-				recvMsgSize = in.read(byteBuffer);
-			} catch (IOException e) {
-				// TODO 自動生成された catch ブロック
-				e.printStackTrace();
-			}
-			while(recvMsgSize != -1){
-				try {
-					out.write(byteBuffer,0,recvMsgSize);
-				} catch (IOException e) {
-					// TODO 自動生成された catch ブロック
-					e.printStackTrace();
-				}
-			}
-
-			try {
-				clntSock.close();
-			} catch (IOException e) {
-				// TODO 自動生成された catch ブロック
-				e.printStackTrace();
-			}
+			clntSock.close();
 		}
 	}
 }
