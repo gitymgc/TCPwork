@@ -22,10 +22,11 @@ public class ImageIOServer {
 	}
 
 	public void exec() throws IOException{
-
+		String dstDirPath = "C:/Users/Yamaguchi/git/TCPwork/TCPworkProject/resources/debug/dst/";
 		int servPort = 10514;
 		ServerSocket servSock = new ServerSocket(servPort);
-
+		
+		int cnt  = 0;
 		for(; ;){
 			System.out.println("start");
 			Socket clntSock = servSock.accept();
@@ -37,10 +38,13 @@ public class ImageIOServer {
 			InputStream in = clntSock.getInputStream();
 			OutputStream out = clntSock.getOutputStream();
 
-			
+
 			BufferedImage srcImg = ImageIO.read(in);
-			
-			ImageIO.write(srcImg, "bmp", new File("D:/tmp/___.bmp"));
+			String dstFilePath = dstDirPath + cnt+".bmp";
+			cnt++;
+			File dstFile = new File(dstFilePath);
+
+			ImageIO.write(srcImg, "bmp",dstFile);
 
 
 			clntSock.close();
