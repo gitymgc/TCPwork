@@ -1,27 +1,33 @@
 package client;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.net.SocketException;
 import java.net.UnknownHostException;
 
+import javax.imageio.ImageIO;
+
 public class ImageIOClient {
-	public static void main(String[] args){
+	public static void main(String[] args) throws Exception{
 
 		new ImageIOClient().exec(args);
 	}
 
-	public void exec(String[] args){
+	public void exec(String[] args) throws Exception{
 
-		if((args.length < 2) || (args.length > 3)){
-			throw new IllegalArgumentException("Parameter(s) : <Server> <Word> [<Port>]");
+		String srcFilePath = "D:/tmp/001.bmp";
+		File srcFile = new File(srcFilePath);
+		BufferedImage srcImg = ImageIO.read(srcFile);
+		
+		if((args.length < 2)){
+			throw new IllegalArgumentException("Parameter(s) : <Server> [<Port>]");
 		}
 
 		String server = args[0];
-		byte[] byteBuffer = args[1].getBytes();
-		int servPort = (args.length == 3)? Integer.parseInt(args[2]) :7;
+		int servPort = (args.length == 2)? Integer.parseInt(args[1]) :10514;
 		Socket sock = null;
 
 		try {
@@ -51,35 +57,12 @@ public class ImageIOClient {
 			e.printStackTrace();
 		}
 		
-		try {
-			out.write(byteBuffer);
-		} catch (IOException e) {
-			// TODO 自動生成された catch ブロック
-			e.printStackTrace();
-		}
 		
-		int totalBytesRcvd = 0;
-		int bytesRcvd = 0;
-		while(totalBytesRcvd < byteBuffer.length){
-			try {
-				bytesRcvd = in.read(byteBuffer,totalBytesRcvd,byteBuffer.length - totalBytesRcvd);
-			} catch (IOException e) {
-				// TODO 自動生成された catch ブロック
-				e.printStackTrace();
-			}
-			
-			if(bytesRcvd == -1){
-				try {
-					throw new SocketException("Connection closed prematurely");
-				} catch (SocketException e) {
-					// TODO 自動生成された catch ブロック
-					e.printStackTrace();
-				}
-			}
-			totalBytesRcvd += bytesRcvd;
-		}
+		ImageIO.write(srcImg, "bmp", out);
 		
-		System.out.println("Received : "+ new String(byteBuffer));
+		
+		
+		
 		try {
 			sock.close();
 		} catch (IOException e) {
