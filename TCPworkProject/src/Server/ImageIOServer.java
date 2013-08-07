@@ -25,7 +25,7 @@ public class ImageIOServer {
 		String dstDirPath = "C:/Users/Yamaguchi/git/TCPwork/TCPworkProject/resources/debug/dst/";
 		int servPort = 10514;
 		ServerSocket servSock = new ServerSocket(servPort);
-		
+
 		int cnt  = 0;
 		for(; ;){
 			System.out.println("start");
@@ -33,7 +33,7 @@ public class ImageIOServer {
 
 			InetAddress clntAddress = clntSock.getInetAddress();
 			String IP = clntAddress.getHostAddress();
-			System.out.println("Handing client at "+IP+ " on port"+ clntSock.getPort());
+//			System.out.println("Handing client at "+IP+ " on port"+ clntSock.getPort());
 
 			InputStream in = clntSock.getInputStream();
 			OutputStream out = clntSock.getOutputStream();
@@ -41,12 +41,21 @@ public class ImageIOServer {
 
 			BufferedImage srcImg = ImageIO.read(in);
 			String dstFilePath = dstDirPath + cnt+".bmp";
-			cnt++;
+//			cnt++;
 			File dstFile = new File(dstFilePath);
-
-			ImageIO.write(srcImg, "bmp",dstFile);
-
-
+			
+			if(srcImg == null){
+				System.out.println(cnt);
+				cnt++;
+				clntSock.close();
+				
+			}else{
+				
+//				System.out.println("ok");
+				cnt++;
+				srcImg.getType();
+				ImageIO.write(srcImg, "bmp",out);
+			}
 			clntSock.close();
 		}
 	}

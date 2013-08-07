@@ -34,6 +34,7 @@ public class ImageIOClient {
 		File srcFiles[] = srcDir.listFiles();
 
 		for(File srcFile : srcFiles){
+			System.out.println(srcFile.getName());
 			//ソケット接続
 			String server = args[0];
 			int servPort = (args.length == 2)? Integer.parseInt(args[1]) :10514;
@@ -68,8 +69,19 @@ public class ImageIOClient {
 			//			String dstFilePath = dstDirPath +srcFile.getName()+"dst.bmp";
 			//			File dstFile = new File(dstFilePath);
 			//			ImageIO.write(dstImg,"bmp",dstFile );
+			if(srcImg == null){
+				sock.close();
+			}else{
+				BufferedImage dstImg = ImageIO.read(in);
+				String path = srcFile.getName();
+				String[] name = path.split("\\.");
+				
+				String dstFilePath = dstDirPath +path+".bmp";
+				File dstFile = new File(dstFilePath);
+				ImageIO.write(dstImg,"bmp",dstFile );
+			}
+			
 			sock.close();
 		}
-
 	}
 }
