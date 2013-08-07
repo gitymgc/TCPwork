@@ -1,5 +1,7 @@
 package Server;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -7,27 +9,22 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import javax.imageio.ImageIO;
+
 public class ImageIOServer {
 
 	private static final int BUFSIZE = 32;
 
 	public static void main(String[] args) throws IOException{
 
-		new ImageIOServer().exec(args);
+		new ImageIOServer().exec();
 
 	}
 
-	public void exec(String args[]) throws IOException{
+	public void exec() throws IOException{
 
-		if(args.length != 1){
-			throw new IllegalArgumentException("Parameter(s): <Port>");
-		}
-
-		int servPort = Integer.parseInt(args[0]);
+		int servPort = 10514;
 		ServerSocket servSock = new ServerSocket(servPort);
-
-		int recvMsgSize ;
-		byte[] byteBuffer = new byte[BUFSIZE];
 
 		for(; ;){
 			System.out.println("start");
@@ -40,9 +37,12 @@ public class ImageIOServer {
 			InputStream in = clntSock.getInputStream();
 			OutputStream out = clntSock.getOutputStream();
 
-			while((recvMsgSize = in.read(byteBuffer)) != -1){
-				out.write(byteBuffer,0,recvMsgSize);
-			}
+			
+			BufferedImage srcImg = ImageIO.read(in);
+			
+			ImageIO.write(srcImg, "bmp", new File("D:/tmp/___.bmp"));
+
+
 			clntSock.close();
 		}
 	}
