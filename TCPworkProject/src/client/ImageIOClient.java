@@ -1,12 +1,10 @@
 package client;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-
-import javax.imageio.ImageIO;
 
 public class ImageIOClient {
 	public static void main(String[] args) throws Exception{
@@ -18,15 +16,6 @@ public class ImageIOClient {
 		if((args.length < 1)){
 			throw new IllegalArgumentException("Parameter(s) : <Server> [<Port>]");
 		}
-
-		//		//ソケット接続
-		//		String server = args[0];
-		//		int servPort = (args.length == 2)? Integer.parseInt(args[1]) :10514;
-		//		Socket sock = new Socket(server, servPort);
-		//		System.out.println("Connected to server ...sending echo string");
-		//
-		//		InputStream in = sock.getInputStream();
-		//		OutputStream out = sock.getOutputStream();
 
 		String srcDirPath = "C:/Users/Yamaguchi/git/TCPwork/TCPworkProject/resources/debug/src/";
 		String dstDirPath = "C:/Users/Yamaguchi/git/TCPwork/TCPworkProject/resources/debug/dst/";
@@ -43,44 +32,55 @@ public class ImageIOClient {
 
 			InputStream in = sock.getInputStream();
 			OutputStream out = sock.getOutputStream();
+			//			BufferedOutputStream out = 
+			//					new BufferedOutputStream(
+			//					sock.getOutputStream()
+			//					);
 
-			BufferedImage srcImg = ImageIO.read(srcFile);
-			//			WritableRaster srcRas = srcImg.getRaster();
-			//			DataBuffer srcBuf = srcRas.getDataBuffer();
-			//			int w = srcImg.getWidth();
-			//			int h = srcImg.getHeight();
-			//
-			//			byte srcBytes[] = new byte[w*h];
-			//			for(int i = 0; i < h*w; i++){
-			//				srcBytes[i] = (byte) srcBuf.getElem(i);
-			//			}
-			ImageIO.write(srcImg, "bmp", out);
+			FileInputStream fis = new FileInputStream(srcFile);
+			int count = 0;
+	
+//			//送信
+//			int data = 0;
+//			while( (data = fis.read() ) != -1){
+//				//				Thread.sleep(1000);
+//				out.write(data);
+//				System.out.println(count++);
+//
+//
+//			}
+//			out.flush();
+//			System.out.println("while 出た");
 
-			//			int totalBytesRcvd = 0;
-			//			int bytesRcvd;
-			//
-			//			while(totalBytesRcvd < srcBytes.length){
-			//				if((bytesRcvd = in.read(srcBytes,totalBytesRcvd,srcBytes.length - totalBytesRcvd)) == -1){
-			//					throw new SocketException("Connection closed prematurely");
-			//				}
-			//				totalBytesRcvd += bytesRcvd;
-			//			}
-			//			BufferedImage dstImg = ImageIO.read(in);
-			//			String dstFilePath = dstDirPath +srcFile.getName()+"dst.bmp";
-			//			File dstFile = new File(dstFilePath);
-			//			ImageIO.write(dstImg,"bmp",dstFile );
-			if(srcImg == null){
-				sock.close();
-			}else{
-				BufferedImage dstImg = ImageIO.read(in);
-				String path = srcFile.getName();
-				String[] name = path.split("\\.");
-				
-				String dstFilePath = dstDirPath +path+".bmp";
-				File dstFile = new File(dstFilePath);
-				ImageIO.write(dstImg,"bmp",dstFile );
-			}
+			int recvMsgSize;
+			int bufSize = 256;
+			byte buf[] = new byte[bufSize];
 			
+			while( (fis.read(buf) != -1)){
+				out.write(buf, 0, bufSize);
+			}
+			System.out.println("while 出た");
+
+			
+			int res = -1;
+//			while(res == -1){
+//				System.out.println("kita");
+//				res = in.read();
+//			}
+			res = in.read();
+			System.out.println(res);
+			
+			//			System.out.println("kita");
+			//			System.out.println(res);
+			//			if(res == 1){
+			//				System.out.println("BufferedImage.TYPE_CUSTOM は処理出来ません。");
+			//				sock.close();
+			//			} else {
+			//				System.out.println("処理開始");
+			//			}
+
+			// グレイスケール画像を取得
+			fis.close();
 			sock.close();
 		}
 	}
