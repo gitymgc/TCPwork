@@ -37,29 +37,27 @@ public class ImageIOServer {
 			String IP = clntAddress.getHostAddress();
 			//			System.out.println("Handing client at "+IP+ " on port"+ clntSock.getPort());
 
-			InputStream in = clntSock.getInputStream();
-			OutputStream out = clntSock.getOutputStream();
-
+			InputStream is = clntSock.getInputStream();
+			OutputStream os = clntSock.getOutputStream();
+			
 			File srcFile = new File("D:/tmp/tmp.bmp");
 			FileOutputStream fos = new FileOutputStream(srcFile);
 			int count = 0;
-			
+
 			//受信
 			// バッファのサイズ
 			int bufSize = 256;
 			int recvMsgSize;
 			byte buf[] = new byte[bufSize];
-			while( (recvMsgSize = in.read(buf) ) != 1){
+			while( (recvMsgSize = is.read(buf) ) != 1){
 				fos.write(buf);
 			}
 
 			BufferedImage srcImg = ImageIO.read(srcFile);
-			WritableRaster srcRas = srcImg.getRaster();
-			DataBuffer srcBuf = srcRas.getDataBuffer();
 
 			//TYPE_CUSTOMははじく
 			if(srcImg.getType() == BufferedImage.TYPE_CUSTOM){
-				out.write(1);
+//				os.write(1);
 				fos.close();
 				clntSock.close();
 				continue;
@@ -83,10 +81,12 @@ public class ImageIOServer {
 					dstBuf.setElem(y*w+x, dst2d[y][x]);
 				}
 			}
-			System.out.println(cnt + " : " + srcBuf.getSize());
-
-			ImageIO.write(dstImg, "bmp", new File("D:/tmp/"+cnt+".png"));
-
+			
+			
+			//送信
+			//ファイルごと
+			ImageIO.write(dstImg, "bmp", os);
+//			ImageIO.write(dstImg, "bmp", new File("D:/tmp/"+cnt+".png"));
 			cnt++;
 
 			fos.close();

@@ -203,7 +203,6 @@ public class ImageDecoder {
 					}
 				}
 			}
-			System.out.println(minV+" , "+maxV);
 			for(int y = 0; y < h; y++){
 				for(int x = 0; x < w; x++){
 					src2d[y][x] = (255*(src2d[y][x]-minV))/(maxV-minV);
