@@ -27,7 +27,7 @@ public class ImageIOServer {
 
 		int servPort = 10514;
 		ServerSocket servSock = new ServerSocket(servPort);
-
+		int cnt = 0;
 		for(; ;){
 			System.out.println("start");
 			Socket clntSock = servSock.accept();
@@ -38,7 +38,7 @@ public class ImageIOServer {
 			InputStream is = clntSock.getInputStream();
 			OutputStream os = clntSock.getOutputStream();
 			
-			File srcFile = new File("D:/tmp/tmp.bmp");
+			File srcFile = new File("/home/yamaguchi/tmp/tmp.bmp");
 			FileOutputStream fos = new FileOutputStream(srcFile);
 
 			//受信
@@ -82,7 +82,12 @@ public class ImageIOServer {
 			}
 			
 			//送信
-			ImageIO.write(dstImg, "bmp", os);
+			//ImageIO.write(dstImg, "bmp", os);
+			String dstFilePath = "/home/yamaguchi/tmp/" + cnt + "bmp";
+			File dstFile = new File(dstFilePath);
+			ImageIO.write(dstImg,"bmp",dstFile);
+			cnt++;
+
 
 			fos.close();
 			clntSock.close();
