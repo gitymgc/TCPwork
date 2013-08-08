@@ -1,73 +1,67 @@
 package client;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.net.UnknownHostException;
-
-import javax.imageio.ImageIO;
 
 public class ImageIOClient {
 	public static void main(String[] args) throws Exception{
-
 		new ImageIOClient().exec(args);
 	}
 
 	public void exec(String[] args) throws Exception{
 
-		String srcFilePath = "D:/tmp/001.bmp";
-		File srcFile = new File(srcFilePath);
-		BufferedImage srcImg = ImageIO.read(srcFile);
-		
-		if((args.length < 2)){
+		if((args.length < 1)){
 			throw new IllegalArgumentException("Parameter(s) : <Server> [<Port>]");
 		}
 
-		String server = args[0];
-		int servPort = (args.length == 2)? Integer.parseInt(args[1]) :10514;
-		Socket sock = null;
+		String srcDirPath = "C:/Users/Yamaguchi/git/TCPwork/TCPworkProject/resources/debug/src/";
+		String dstDirPath = "C:/Users/Yamaguchi/git/TCPwork/TCPworkProject/resources/debug/dst/";
+		File srcDir = new File(srcDirPath);
+		File srcFiles[] = srcDir.listFiles();
 
-		try {
-			sock = new Socket(server, servPort);
-		} catch (UnknownHostException e) {
-			// TODO 自動生成された catch ブロック
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO 自動生成された catch ブロック
-			e.printStackTrace();
-		}
-		System.out.println("Connected to server ...sending echo string");
+		for(File srcFile : srcFiles){
+			System.out.println(srcFile.getName());
+			//ソケット接続
+			String server = args[0];
+			int servPort = (args.length == 2)? Integer.parseInt(args[1]) :10514;
+			Socket sock = new Socket(server, servPort);
+			System.out.println("Connected to server ...sending echo string");
 
-		InputStream in = null;
-		try {
-			in = sock.getInputStream();
-		} catch (IOException e) {
-			// TODO 自動生成された catch ブロック
-			e.printStackTrace();
-		}
+			InputStream is = sock.getInputStream();
+			OutputStream os = sock.getOutputStream();
+			//			BufferedOutputStream out = 
+			//					new BufferedOutputStream(
+			//					sock.getOutputStream()
+			//					);
 
-		OutputStream out = null;
-		try {
-			out = sock.getOutputStream();
-		} catch (IOException e) {
-			// TODO 自動生成された catch ブロック
-			e.printStackTrace();
-		}
-		
-		
-		ImageIO.write(srcImg, "bmp", out);
-		
-		
-		
-		
-		try {
+			FileInputStream fis = new FileInputStream(srcFile);
+			int count = 0;
+
+			//送信
+			int data = 0;
+			// バッファのサイズ
+			int bufSize = 4096;
+			int recvMsgSize;
+			byte buf[] = new byte[bufSize];
+			while( (recvMsgSize = fis.read(buf) ) != -1){
+				os.write(buf);
+			}
+			os.write(1);
+
+			int res = 0;
+			res = is.read();
+			if(res == 1){
+				System.out.println("BufferedImage.TYPE_CUSTOM は処理出来ません。");
+				sock.close();
+			} else {
+				System.out.println("処理開始");
+			}
+
+			fis.close();
 			sock.close();
-		} catch (IOException e) {
-			// TODO 自動生成された catch ブロック
-			e.printStackTrace();
 		}
 	}
 }
