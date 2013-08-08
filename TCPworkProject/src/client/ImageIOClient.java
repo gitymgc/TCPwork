@@ -68,6 +68,7 @@ public class ImageIOClient {
 			BufferedImage dstImg = ImageIO.read(is);
 			String dstFilePath = dstDirPath + srcFile.getName()+ ".bmp";
 			File dstFile = new File(dstFilePath);
+			if(dstImg == null)continue;
 			ImageIO.write(dstImg, "bmp", dstFile);
 			fis.close();
 			sock.close();
