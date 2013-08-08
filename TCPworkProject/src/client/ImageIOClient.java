@@ -20,8 +20,8 @@ public class ImageIOClient {
 			throw new IllegalArgumentException("Parameter(s) : <Server> [<Port>]");
 		}
 
-		String srcDirPath = "C:/Users/Yamaguchi/git/TCPwork/TCPworkProject/resources/debug/src/";
-		String dstDirPath = "C:/Users/Yamaguchi/git/TCPwork/TCPworkProject/resources/debug/dst/";
+		String srcDirPath = "./resources/debug/src/";
+		String dstDirPath = "./resources/debug/dst/";
 		File srcDir = new File(srcDirPath);
 		File srcFiles[] = srcDir.listFiles();
 
@@ -54,26 +54,21 @@ public class ImageIOClient {
 			}
 			os.write(1);
 
-			//			int res = 0;
-			//			res = is.read();
-			//			if(res == 1){
-			//				System.out.println("BufferedImage.TYPE_CUSTOM は処理出来ません。");
-			//				sock.close();
-			//			} else {
+			int res = 0;
+			res = is.read();
+			if(res == 1){
+				System.out.println("BufferedImage.TYPE_CUSTOM は処理出来ません。");
+				sock.close();
+				continue;
+			} else {
+
+			}
 
 			System.out.println("処理開始");
 			BufferedImage dstImg = ImageIO.read(is);
 			String dstFilePath = dstDirPath + srcFile.getName()+ ".bmp";
 			File dstFile = new File(dstFilePath);
-			if(dstImg != null){
-				ImageIO.write(dstImg, "bmp", dstFile);
-			}else{
-				System.out.println("BufferedImage.TYPE_CUSTOM は処理出来ません。");
-				fis.close();
-				sock.close();
-				continue;
-			}
-			//			}
+			ImageIO.write(dstImg, "bmp", dstFile);
 			fis.close();
 			sock.close();
 		}

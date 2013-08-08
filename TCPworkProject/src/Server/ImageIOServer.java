@@ -24,25 +24,22 @@ public class ImageIOServer {
 	}
 
 	public void exec() throws Exception{
-		String dstDirPath = "C:/Users/Yamaguchi/git/TCPwork/TCPworkProject/resources/debug/dst/";
+
 		int servPort = 10514;
 		ServerSocket servSock = new ServerSocket(servPort);
 
-		int cnt  = 0;
 		for(; ;){
 			System.out.println("start");
 			Socket clntSock = servSock.accept();
 
 			InetAddress clntAddress = clntSock.getInetAddress();
 			String IP = clntAddress.getHostAddress();
-			//			System.out.println("Handing client at "+IP+ " on port"+ clntSock.getPort());
 
 			InputStream is = clntSock.getInputStream();
 			OutputStream os = clntSock.getOutputStream();
 			
 			File srcFile = new File("D:/tmp/tmp.bmp");
 			FileOutputStream fos = new FileOutputStream(srcFile);
-			int count = 0;
 
 			//受信
 			// バッファのサイズ
@@ -57,10 +54,12 @@ public class ImageIOServer {
 
 			//TYPE_CUSTOMははじく
 			if(srcImg.getType() == BufferedImage.TYPE_CUSTOM){
-//				os.write(1);
+				os.write(1);
 				fos.close();
 				clntSock.close();
 				continue;
+			}else{
+				os.write(0);
 			}
 
 			int h = srcImg.getHeight();
@@ -82,12 +81,8 @@ public class ImageIOServer {
 				}
 			}
 			
-			
 			//送信
-			//ファイルごと
 			ImageIO.write(dstImg, "bmp", os);
-//			ImageIO.write(dstImg, "bmp", new File("D:/tmp/"+cnt+".png"));
-			cnt++;
 
 			fos.close();
 			clntSock.close();
