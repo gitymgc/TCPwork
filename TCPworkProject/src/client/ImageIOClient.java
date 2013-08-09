@@ -77,6 +77,7 @@ public class ImageIOClient {
 			BufferedImage dstImg = ImageIO.read(dstFile);
 //			if(dstImg == null)continue;
 			ImageIO.write(dstImg, "bmp", dstFile);
+			fos.flush();
 			fos.close();
 			fis.close();
 			sock.close();
