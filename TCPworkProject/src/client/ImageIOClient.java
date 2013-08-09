@@ -70,9 +70,9 @@ public class ImageIOClient {
 			String dstFilePath = dstDirPath + srcFile.getName()+ ".bmp";
 			File dstFile = new File(dstFilePath);
 			FileOutputStream fos = new FileOutputStream(dstFile);
-			byte DstBuf[] =  new byte[256];
-			while((recvMsgSize = is.read(DstBuf)) != 1){
-				fos.write(DstBuf);
+			byte elemBuf[] =  new byte[256];
+			while((recvMsgSize = is.read(elemBuf)) != 1){
+				fos.write(elemBuf);
 			}
 			BufferedImage dstImg = ImageIO.read(dstFile);
 //			if(dstImg == null)continue;
