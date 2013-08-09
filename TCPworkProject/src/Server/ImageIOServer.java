@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBuffer;
 import java.awt.image.WritableRaster;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -37,8 +38,9 @@ public class ImageIOServer {
 
 			InputStream is = clntSock.getInputStream();
 			OutputStream os = clntSock.getOutputStream();
-			
-			File srcFile = new File("/home/yamaguchi/tmp/tmp.bmp");
+
+			//			File srcFile = new File("/home/yamaguchi/tmp/tmp.bmp");
+			File srcFile = new File("D:/tmp/tmp.bmp");
 			FileOutputStream fos = new FileOutputStream(srcFile);
 
 			//受信
@@ -80,16 +82,29 @@ public class ImageIOServer {
 					dstBuf.setElem(y*w+x, dst2d[y][x]);
 				}
 			}
-			
+
 			//送信
 			//ImageIO.write(dstImg, "bmp", os);
-			String dstFilePath = "/home/yamaguchi/tmp/" + cnt + "bmp";
+			//			File dstFile = new File("/home/yamaguchi/tmp/tmp.bmp");
+			String dstFilePath = "D:/tmp/"+cnt+".bmp";
 			File dstFile = new File(dstFilePath);
-			ImageIO.write(dstImg,"bmp",dstFile);
+			ImageIO.write(dstImg, "bmp", dstFile);
+			//			String dstFilePath = "/home/yamaguchi/tmp/" + cnt + "bmp";
+
+			//			File dstFile = new File(dstFilePath);
+			FileInputStream fis = new FileInputStream(dstFile);
+			byte dstFileBuf[] =  new byte[h*w];
+			while((recvMsgSize = fis.read(dstFileBuf)) != -1){
+				os.write(dstFileBuf);
+			}
+			os.write(1);
+
+			//			ImageIO.write(dstImg,"bmp",dstFile);
 			cnt++;
 
 
 			fos.close();
+			fis.close();
 			clntSock.close();
 		}
 	}
