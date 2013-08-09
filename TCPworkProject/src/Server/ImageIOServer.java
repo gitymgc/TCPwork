@@ -60,6 +60,7 @@ public class ImageIOServer {
 			}catch(IIOException e){
 				//TYPE_CUSTOMははじく
 				os.write(1);
+				fos.flush();
 				fos.close();
 				clntSock.close();
 				continue;
