@@ -12,6 +12,7 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import javax.imageio.IIOException;
 import javax.imageio.ImageIO;
 
 public class ImageIOServer {
@@ -52,16 +53,16 @@ public class ImageIOServer {
 				fos.write(buf);
 			}
 
-			BufferedImage srcImg = ImageIO.read(srcFile);
-
-			//TYPE_CUSTOMははじく
-			if(srcImg.getType() == BufferedImage.TYPE_CUSTOM){
+			BufferedImage srcImg = null;
+			try{
+				srcImg = ImageIO.read(srcFile);
+				os.write(0);
+			}catch(IIOException e){
+				//TYPE_CUSTOMははじく
 				os.write(1);
 				fos.close();
 				clntSock.close();
 				continue;
-			}else{
-				os.write(0);
 			}
 
 			int h = srcImg.getHeight();
