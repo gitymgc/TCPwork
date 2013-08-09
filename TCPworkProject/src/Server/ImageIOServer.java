@@ -40,8 +40,8 @@ public class ImageIOServer {
 			InputStream is = clntSock.getInputStream();
 			OutputStream os = clntSock.getOutputStream();
 
-			//			File srcFile = new File("/home/yamaguchi/tmp/tmp.bmp");
-			File srcFile = new File("D:/tmp/tmp.bmp");
+			File srcFile = new File("/home/yamaguchi/tmp/tmp.bmp");
+			//			File srcFile = new File("D:/tmp/tmp.bmp");
 			FileOutputStream fos = new FileOutputStream(srcFile);
 
 			//受信
@@ -56,7 +56,7 @@ public class ImageIOServer {
 			BufferedImage srcImg = null;
 			try{
 				srcImg = ImageIO.read(srcFile);
-				os.write(0);
+
 			}catch(IIOException e){
 				//TYPE_CUSTOMははじく
 				os.write(1);
@@ -64,6 +64,7 @@ public class ImageIOServer {
 				clntSock.close();
 				continue;
 			}
+			os.write(0);
 
 			int h = srcImg.getHeight();
 			int w = srcImg.getWidth();
@@ -86,12 +87,12 @@ public class ImageIOServer {
 
 			//送信
 			//ImageIO.write(dstImg, "bmp", os);
-			//			File dstFile = new File("/home/yamaguchi/tmp/tmp.bmp");
-			String dstFilePath = "D:/tmp/"+cnt+".bmp";
+//			File dstFile = new File("/home/yamaguchi/tmp/tmp.bmp");
+			//			String dstFilePath = "D:/tmp/"+cnt+".bmp";
+			String dstFilePath = "/home/yamaguchi/tmp/" + cnt + "bmp";
 			File dstFile = new File(dstFilePath);
 			ImageIO.write(dstImg, "bmp", dstFile);
-			//			String dstFilePath = "/home/yamaguchi/tmp/" + cnt + "bmp";
-
+			
 			//			File dstFile = new File(dstFilePath);
 			FileInputStream fis = new FileInputStream(dstFile);
 			byte dstFileBuf[] =  new byte[4096];
