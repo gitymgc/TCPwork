@@ -104,7 +104,7 @@ public class ImageIOServer {
 			//			ImageIO.write(dstImg,"bmp",dstFile);
 			cnt++;
 
-
+			fos.flush();
 			fos.close();
 			fis.close();
 			clntSock.close();
