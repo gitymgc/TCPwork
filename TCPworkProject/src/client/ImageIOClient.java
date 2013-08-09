@@ -58,15 +58,15 @@ public class ImageIOClient {
 			int res = 0;
 			res = is.read();
 			if(res == 1){
-				System.out.println("BufferedImage.TYPE_CUSTOM は処理出来ません。");
+				System.out.println("このファイル形式にはサーバは対応していません。");
 				sock.close();
 				continue;
 			} else {
 
 			}
 			System.out.println("処理開始");
+			
 			//受信
-
 			String dstFilePath = dstDirPath + srcFile.getName()+ ".bmp";
 			File dstFile = new File(dstFilePath);
 			FileOutputStream fos = new FileOutputStream(dstFile);
