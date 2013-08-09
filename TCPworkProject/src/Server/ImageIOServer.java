@@ -40,13 +40,13 @@ public class ImageIOServer {
 			InputStream is = clntSock.getInputStream();
 			OutputStream os = clntSock.getOutputStream();
 
-			File srcFile = new File("/home/yamaguchi/tmp/tmp.bmp");
-//			File srcFile = new File("D:/tmp/tmp.bmp");
+			//			File srcFile = new File("/home/yamaguchi/tmp/tmp.bmp");
+			File srcFile = new File("D:/tmp/tmp.bmp");
 			FileOutputStream fos = new FileOutputStream(srcFile);
 
 			//受信
 			// バッファのサイズ
-			int bufSize = 256;
+			int bufSize = 4096;
 			int recvMsgSize;
 			byte buf[] = new byte[bufSize];
 			while( (recvMsgSize = is.read(buf) ) != 1){
@@ -87,13 +87,14 @@ public class ImageIOServer {
 			//送信
 			//ImageIO.write(dstImg, "bmp", os);
 			//			File dstFile = new File("/home/yamaguchi/tmp/tmp.bmp");
-			//			String dstFilePath = "D:/tmp/"+cnt+".bmp";
-			String dstFilePath = "/home/yamaguchi/tmp/" + cnt + "bmp";
+			String dstFilePath = "D:/tmp/"+cnt+".bmp";
 			File dstFile = new File(dstFilePath);
 			ImageIO.write(dstImg, "bmp", dstFile);
+			//			String dstFilePath = "/home/yamaguchi/tmp/" + cnt + "bmp";
 
+			//			File dstFile = new File(dstFilePath);
 			FileInputStream fis = new FileInputStream(dstFile);
-			byte dstFileBuf[] =  new byte[h*w];
+			byte dstFileBuf[] =  new byte[4096];
 			while((recvMsgSize = fis.read(dstFileBuf)) != -1){
 				os.write(dstFileBuf);
 			}
