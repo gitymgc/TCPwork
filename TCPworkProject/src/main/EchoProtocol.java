@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 
 
-class EchoProtocol implements Runnable{
+public class EchoProtocol implements Runnable{
 	static public final int BUFSIZE = 32;
 
 	private Socket clntSock;
