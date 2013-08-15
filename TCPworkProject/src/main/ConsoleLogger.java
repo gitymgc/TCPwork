@@ -3,7 +3,7 @@ package main;
 import java.util.Collection;
 import java.util.Iterator;
 
-class ConsoleLogger implements Logger{
+public class ConsoleLogger implements Logger{
 
 	public synchronized void writeEntry(Collection entry){
 		//変化式無し
