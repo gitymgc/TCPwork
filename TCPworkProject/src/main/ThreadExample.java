@@ -1,4 +1,4 @@
-package Server;
+package main;
 
 public class ThreadExample implements Runnable{
 
