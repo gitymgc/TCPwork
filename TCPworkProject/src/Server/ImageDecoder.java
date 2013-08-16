@@ -3,17 +3,15 @@ package Server;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBuffer;
 import java.awt.image.WritableRaster;
-import java.io.File;
 
 public class ImageDecoder {
 	/**
 	 *  各BufferedImageタイプの画像ファイルを全て一意にグレイスケールに変換
 	 * @param srcImg
 	 * @param src2d
-	 * @param srcFile
 	 * @throws Exception
 	 */
-	public static void exec(BufferedImage srcImg, int[][] src2d, File srcFile)throws Exception{
+	public static void exec(BufferedImage srcImg, int[][] src2d)throws Exception{
 
 		WritableRaster srcRas = srcImg.getRaster();
 		DataBuffer srcBuf = srcRas.getDataBuffer();

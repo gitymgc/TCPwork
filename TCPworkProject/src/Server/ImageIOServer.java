@@ -40,14 +40,14 @@ public class ImageIOServer {
 			InputStream is = clntSock.getInputStream();
 			OutputStream os = clntSock.getOutputStream();
 
-			File srcFile = new File("/home/yamaguchi/tmp/tmp.bmp");
-			//			File srcFile = new File("D:/tmp/tmp.bmp");
+			//			File srcFile = new File("/home/yamaguchi/tmp/tmp.bmp");
+			File srcFile = new File("D:/tmp/tmp.bmp");
 			FileOutputStream fos = new FileOutputStream(srcFile);
 
 			//受信
 			// バッファのサイズ
-			int bufSize = 4096;
-			int recvMsgSize;
+			int bufSize = 256;
+			int recvMsgSize = 0;
 			byte buf[] = new byte[bufSize];
 			while( (recvMsgSize = is.read(buf) ) != 1){
 				fos.write(buf);
@@ -60,7 +60,7 @@ public class ImageIOServer {
 			}catch(IIOException e){
 				//TYPE_CUSTOMははじく
 				os.write(1);
-				fos.flush();
+//				fos.flush();
 				fos.close();
 				clntSock.close();
 				continue;
@@ -69,10 +69,10 @@ public class ImageIOServer {
 
 			int h = srcImg.getHeight();
 			int w = srcImg.getWidth();
-
+			System.out.println(" w = "+w+" h = "+h);
 			int src2d[][] = new int[h][w];
 
-			ImageDecoder.exec(srcImg,src2d,srcFile);
+			ImageDecoder.exec(srcImg,src2d);
 
 			BufferedImage dstImg = new BufferedImage(w,h,BufferedImage.TYPE_BYTE_GRAY);
 			WritableRaster dstRas = dstImg.getRaster();
@@ -88,15 +88,16 @@ public class ImageIOServer {
 
 			//送信
 			//ImageIO.write(dstImg, "bmp", os);
-//			File dstFile = new File("/home/yamaguchi/tmp/tmp.bmp");
-			//			String dstFilePath = "D:/tmp/"+cnt+".bmp";
-			String dstFilePath = "/home/yamaguchi/tmp/" + cnt + "bmp";
+			//			File dstFile = new File("/home/yamaguchi/tmp/tmp.bmp");
+			String dstFilePath = "D:/tmp/"+cnt+".bmp";
+			//			String dstFilePath = "/home/yamaguchi/tmp/" + cnt + "bmp";
 			File dstFile = new File(dstFilePath);
 			ImageIO.write(dstImg, "bmp", dstFile);
-			
+
 			//			File dstFile = new File(dstFilePath);
 			FileInputStream fis = new FileInputStream(dstFile);
-			byte dstFileBuf[] =  new byte[4096];
+			byte dstFileBuf[] =  new byte[256];
+			
 			while((recvMsgSize = fis.read(dstFileBuf)) != -1){
 				os.write(dstFileBuf);
 			}
@@ -105,7 +106,7 @@ public class ImageIOServer {
 			//			ImageIO.write(dstImg,"bmp",dstFile);
 			cnt++;
 
-			fos.flush();
+//			fos.flush();
 			fos.close();
 			fis.close();
 			clntSock.close();
