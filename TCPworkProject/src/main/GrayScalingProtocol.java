@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
-import Server.ImageDecoder;
+
 
 public class GrayScalingProtocol implements Runnable{
 	static public final int BUFSIZE = 32;
