@@ -29,7 +29,7 @@ public class ImageIOClient {
 			System.out.println(srcFile.getName());
 			//ソケット接続
 			String server = args[0];
-			int servPort = (args.length == 2)? Integer.parseInt(args[1]) :10514;
+			int servPort = (args.length == 2)? Integer.parseInt(args[1]) :7;
 			Socket sock = new Socket(server, servPort);
 			System.out.println("Connected to server ...sending echo string");
 
