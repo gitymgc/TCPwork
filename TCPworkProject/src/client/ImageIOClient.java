@@ -37,6 +37,11 @@ public class ImageIOClient {
 			OutputStream os = sock.getOutputStream();
 			
 			BufferedImage srcImg = ImageIO.read(srcFile);
+			System.out.println(srcImg.getType());
+			if((srcImg.getType() == BufferedImage.TYPE_4BYTE_ABGR) || (srcImg.getType() == BufferedImage.TYPE_USHORT_GRAY) || (srcImg.getType() == BufferedImage.TYPE_CUSTOM)){
+				sock.close();
+				continue;
+			}
 			String name = srcFile.getName();
 			String sepName[] = name.split("\\.");
 			ImageIO.write(srcImg, sepName[1],os);
