@@ -21,6 +21,7 @@ public class GrayScalingProtocol implements Runnable{
 	
 	public GrayScalingProtocol(Socket clntSock , Logger logger){
 		this.clntSock = clntSock;
+		this.logger = logger;
 	}
 	
 	public void run(){
