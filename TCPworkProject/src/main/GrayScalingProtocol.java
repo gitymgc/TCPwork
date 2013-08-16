@@ -52,6 +52,7 @@ public class GrayScalingProtocol implements Runnable{
 			}
 			
 			ImageIO.write(srcImg, "bmp", os);
+			entry.add("OK");
 		}catch(IOException e){
 			entry.add("Exception = " + e.getMessage());
 		}
