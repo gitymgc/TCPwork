@@ -11,7 +11,7 @@ public class PoolDispatcher implements Dispatcher{
 
 	private int numThreads;  //プールに含まれるスレッドの数
 	public PoolDispatcher(){
-		//Systemプロパティからスレッドの数を取得するか、デフォルト値を使用する。
+		//Systemプロパティからスレッドの数を取得するか、デフォルト値を使用する。初期値設定
 		numThreads = Integer.parseInt(System.getProperty(THREADPROP,NUMTHREADS));
 	}
 

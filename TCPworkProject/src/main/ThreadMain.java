@@ -17,6 +17,7 @@ public class ThreadMain {
 				Class.forName(protocolName + "ProtocolFactory").newInstance();
 		Dispatcher dispatcher = (Dispatcher)
 				Class.forName(dispatcherName + "Dispatcher").newInstance();
+		
 		dispatcher.startDispatching(servSock, logger,protoFactory);
 	}
 }
