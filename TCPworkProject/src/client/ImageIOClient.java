@@ -7,9 +7,11 @@ import java.io.OutputStream;
 import java.net.Socket;
 
 import javax.imageio.ImageIO;
+import javax.imageio.stream.ImageInputStream;
 
 public class ImageIOClient {
 	public static void main(String[] args) throws Exception{
+		while(true)
 		new ImageIOClient().exec(args);
 	}
 
@@ -19,8 +21,8 @@ public class ImageIOClient {
 			throw new IllegalArgumentException("Parameter(s) : <Server> [<Port>]");
 		}
 
-		String srcDirPath = "./resources/debug/src/";
-		String dstDirPath = "./resources/debug/dst/";
+		String srcDirPath = "./debug/src/";
+		String dstDirPath = "./debug/dst/";
 		
 		File srcDir = new File(srcDirPath);
 		File srcFiles[] = srcDir.listFiles();
@@ -44,12 +46,13 @@ public class ImageIOClient {
 			}
 			String name = srcFile.getName();
 			String sepName[] = name.split("\\.");
-			ImageIO.write(srcImg, sepName[1],os);
+			ImageIO.write(srcImg, "bmp",os);
 			
 			System.out.println("処理開始");
 			
 			//受信
-			BufferedImage dstImg = ImageIO.read(is);
+			ImageInputStream iis =ImageIO.createImageInputStream(is);
+			BufferedImage dstImg = ImageIO.read(iis);
 			String dstFilePath = dstDirPath + srcFile.getName()+ ".bmp";
 			File dstFile = new File(dstFilePath);
 			ImageIO.write(dstImg, "bmp", dstFile);

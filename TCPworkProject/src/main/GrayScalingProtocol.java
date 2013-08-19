@@ -83,6 +83,7 @@ public class GrayScalingProtocol implements Runnable{
 			entry.add("Exception = " + e.getMessage());
 		}
 		try{
+			if(clntSock.isClosed())
 			clntSock.close();
 		}catch(IOException e){
 			entry.add("Exception = " + e.getMessage());

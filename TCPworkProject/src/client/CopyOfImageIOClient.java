@@ -22,8 +22,8 @@ public class CopyOfImageIOClient {
 			throw new IllegalArgumentException("Parameter(s) : <Server> [<Port>]");
 		}
 
-		String srcDirPath = "./resources/debug/src/";
-		String dstDirPath = "./resources/debug/dst/";
+		String srcDirPath = "./debug/src/";
+		String dstDirPath = "./debug/dst/";
 
 		File srcDir = new File(srcDirPath);
 		File srcFiles[] = srcDir.listFiles();

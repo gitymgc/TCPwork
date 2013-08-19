@@ -1,41 +1,38 @@
 package client;
 
-import java.io.File;
-import java.io.FileInputStream;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBuffer;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 public class test {
 
 	public static void main(String[] args) throws IOException{
 
-		String srcDirPath = "C:/Users/Yamaguchi/git/TCPwork/TCPworkProject/resources/debug/src";
-		String dstDirPath = "C:/Users/Yamaguchi/git/TCPwork/TCPworkProject/resources/debug/dst/";
-		File srcDir = new File(srcDirPath);
-		File srcFiles[] = srcDir.listFiles();
-		System.out.println(srcFiles.length);
-		//		for(File srcFile : srcFiles){
-		File srcFile = srcFiles[0];
-		FileInputStream fis = new FileInputStream(srcFile);
-		int data = 0;
-		System.out.println(fis.read());
-//		while( (data = fis.read() ) != -1){
-//			System.out.println(data);
-//			//				out.write(data);
-//		}
+		
+		int dst2d[][] = new int[256][256];
+		dst2d[0][0] = 255;
+		dst2d[1][1] = 255;
+		
+		
+		BufferedImage dstImg = new BufferedImage(256, 256, BufferedImage.TYPE_BYTE_GRAY);
+		DataBuffer dstBuf = dstImg.getRaster().getDataBuffer();
+		
+		for(int y = 0; y < 4; y++)
+			for(int x = 0; x < 4; x++)
+				dstBuf.setElem(y*4+x, dst2d[y][x]);
+			
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		ImageIO.write(dstImg, "jpg", baos);
+		
+//		ImageIO.write(dstImg, "bmp", new File("D:/tmp/001.bmp"));
+		
+		
+		byte b[] = baos.toByteArray();
 
-		//			BufferedImage srcImg = ImageIO.read(srcFile);
-		//			WritableRaster srcRas = srcImg.getRaster();
-		//			DataBuffer srcBuf = srcRas.getDataBuffer();
-		//			
-		//			String path = srcFile.getName();
-		//			String[] name = path.split("\\.");
-
-		//			String dstFilePath = dstDirPath + name[0] + ".bmp";
-		//			File dstFile = new File(dstFilePath);
-		//			
-		//			ImageIO.write(srcImg, "bmp", dstFile);
-
-		//		}
+System.out.println(b.length);
 	}
 
 }
