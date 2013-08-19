@@ -1,8 +1,8 @@
 package client;
 
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBuffer;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
@@ -50,31 +50,58 @@ public class CopyOfImageIOClient {
 			String sepName[] = name.split("\\.");
 //			System.out.println(sepName[1]);
 			ImageIO.write(srcImg, "bmp",os);
-
+			
+			/*
+			 * サーバ処理中。。
+			 */
+			
+			// 受信 : データサイズ
+			int dataSize = 0;
+			for(int i = 0, buf = 0; (buf = is.read()) != 255; i += 8){
+				dataSize |= buf << i;
+			}
+			
+			// 受信 : データ輝度値
+			byte data[] = new byte[dataSize];
+			int recvMsgSize;
+			int total = 0;
+			byte buf[] = new byte[256];
+			while((recvMsgSize = is.read(buf)) != -1){
+				System.arraycopy(buf, 0, data, total, recvMsgSize);
+				total += recvMsgSize;
+			}
+			
 //			System.out.println("処理開始");
 
-//			//受信
-//			BufferedImage dstImg = ImageIO.read(is);
-//			String dstFilePath = dstDirPath + srcFile.getName()+ ".bmp";
-//			File dstFile = new File(dstFilePath);
-//			ImageIO.write(dstImg, "bmp", dstFile);
-//			sock.close();
+			//受信
+			BufferedImage dstImg = new BufferedImage(srcImg.getWidth(), srcImg.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
+			DataBuffer dstBuf = dstImg.getRaster().getDataBuffer();
+			for(int y = 0; y < srcImg.getHeight(); y++)
+				for(int x = 0; x < srcImg.getWidth(); x++)
+					dstBuf.setElem(y*srcImg.getWidth()+x, data[y*srcImg.getWidth()+x]&0xff);
 			
 			String dstFilePath = dstDirPath + srcFile.getName()+ ".bmp";
 			File dstFile = new File(dstFilePath);
-			FileOutputStream fos = new FileOutputStream(dstFile);
+			ImageIO.write(dstImg, "bmp", dstFile);
+//			
 			
-			int recvMsgSize;
-			byte buf[] = new byte[256];
-			while((recvMsgSize = is.read(buf)) != -1){
-				fos.write(buf, 0, recvMsgSize);
-			}
-			System.out.println(dstFile.length());
-			if(dstFile.length() != 85758){
-				System.exit(1);
-			}
-			fos.close();
-			
+//			String dstFilePath = dstDirPath + srcFile.getName()+ ".bmp";
+//			File dstFile = new File(dstFilePath);
+//			FileOutputStream fos = new FileOutputStream(dstFile);
+//			
+//			int recvMsgSize;
+//			byte buf[] = new byte[256];
+//			while((recvMsgSize = is.read(buf)) != -1){
+//				fos.write(buf, 0, recvMsgSize);
+//			}
+//			System.out.println(dstFile.length());
+//			if(dstFile.length() != 85758){
+//				System.exit(1);
+//			}
+//			os.write(1);
+//			fos.close();
+			sock.close();
+			System.out.println("owari");
 		}
 	}
 }
