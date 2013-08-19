@@ -59,22 +59,22 @@ public class GrayScalingProtocol implements Runnable{
 				}
 			}
 			
-			// 送信 : データサイズ
-			int dataSize = w*h;
-			for(int i = dataSize; 0 < i; i >>= 8){
-				os.write(i&0xff);
-			}
-			os.write(-1);
+//			// 送信 : データサイズ
+//			int dataSize = w*h;
+//			for(int i = dataSize; 0 < i; i >>= 8){
+//				os.write(i&0xff);
+//			}
+//			os.write(-1);
+//			
+//			// 送信 : データ（輝度値)
+//			for(int y = 0; y < h; y++){
+//				for(int x = 0; x < w; x++){
+//					os.write(dst2d[y][x]);
+//				}
+//			}
 			
-			// 送信 : データ（輝度値)
-			for(int y = 0; y < h; y++){
-				for(int x = 0; x < w; x++){
-					os.write(dst2d[y][x]);
-				}
-			}
 			
-			
-//			ImageIO.write(dstImg, "bmp", os);
+			ImageIO.write(dstImg, "bmp", os);
 			
 //			System.out.println(is.read());
 //			ImageIO.write(dstImg, "bmp", new File("D:/tmp/tmp.bmp"));
